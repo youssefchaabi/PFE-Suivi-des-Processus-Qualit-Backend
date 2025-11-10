@@ -1,0 +1,109 @@
+# ============================================
+# APPLICATION DE SUIVI DES PROCESSUS QUALITÉ
+# Template de configuration
+# ============================================
+
+# ============================================
+# SERVEUR
+# ============================================
+server.port=8080
+server.servlet.context-path=/
+
+# ============================================
+# MONGODB
+# ============================================
+spring.data.mongodb.host=localhost
+spring.data.mongodb.port=27017
+spring.data.mongodb.database=qualite_db
+# Si authentification nécessaire :
+# spring.data.mongodb.username=votre_username
+# spring.data.mongodb.password=votre_password
+# spring.data.mongodb.authentication-database=admin
+
+# ============================================
+# JWT SECURITY
+# ============================================
+# Clé secrète pour signer les tokens JWT (CHANGEZ CETTE VALEUR EN PRODUCTION!)
+jwt.secret=VotreCleSecreteTresLongueEtComplexePourLaProductionMinimum256Bits
+# Durée de validité du token en millisecondes (24 heures = 86400000)
+jwt.expiration=86400000
+
+# ============================================
+# EMAIL (SMTP)
+# ============================================
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=votre.email@gmail.com
+spring.mail.password=votre_mot_de_passe_application
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.starttls.required=true
+spring.mail.properties.mail.smtp.connectiontimeout=5000
+spring.mail.properties.mail.smtp.timeout=5000
+spring.mail.properties.mail.smtp.writetimeout=5000
+
+# Pour Gmail, utilisez un "Mot de passe d'application"
+# https://support.google.com/accounts/answer/185833
+
+# ============================================
+# SMS NOTIFICATIONS
+# ============================================
+# Activer/désactiver les notifications SMS
+notifications.sms.enabled=false
+
+# Configuration Twilio (si activé)
+twilio.account.sid=VOTRE_ACCOUNT_SID
+twilio.auth.token=VOTRE_AUTH_TOKEN
+twilio.phone.number=+33123456789
+
+# ============================================
+# LOGGING
+# ============================================
+logging.level.root=INFO
+logging.level.com.pfe.qualite=DEBUG
+logging.level.org.springframework.web=DEBUG
+logging.level.org.springframework.security=DEBUG
+logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} - %msg%n
+logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+logging.file.name=logs/qualite-app.log
+
+# ============================================
+# SCHEDULER
+# ============================================
+# Activer/désactiver le scheduler
+spring.task.scheduling.enabled=true
+
+# ============================================
+# CORS
+# ============================================
+# Origines autorisées (séparer par des virgules)
+cors.allowed.origins=http://localhost:4200,http://localhost:8080
+
+# ============================================
+# UPLOAD DE FICHIERS
+# ============================================
+spring.servlet.multipart.enabled=true
+spring.servlet.multipart.max-file-size=10MB
+spring.servlet.multipart.max-request-size=10MB
+file.upload-dir=uploads
+
+# ============================================
+# ACTUATOR (Monitoring)
+# ============================================
+management.endpoints.web.exposure.include=health,info,metrics
+management.endpoint.health.show-details=when-authorized
+
+# ============================================
+# DEVTOOLS (Développement uniquement)
+# ============================================
+spring.devtools.restart.enabled=true
+spring.devtools.livereload.enabled=true
+
+# ============================================
+# NOTES IMPORTANTES
+# ============================================
+# 1. Copiez ce fichier vers application.properties
+# 2. Remplacez toutes les valeurs par vos vraies configurations
+# 3. NE COMMITEZ JAMAIS application.properties avec vos vraies valeurs
+# 4. Ajoutez application.properties dans .gitignore
+# 5. En production, utilisez des variables d'environnement
