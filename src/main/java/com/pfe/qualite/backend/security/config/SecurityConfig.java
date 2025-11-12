@@ -53,6 +53,7 @@ public class SecurityConfig {
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/**").hasAnyRole("ADMIN", "CHEF_PROJET", "PILOTE_QUALITE")
                            .requestMatchers("/api/ai-analytics/**").hasRole("PILOTE_QUALITE")
                         .requestMatchers("/api/ai-charts/**").hasRole("PILOTE_QUALITE")
+                        .requestMatchers("/api/chat/**").hasAnyRole("ADMIN", "CHEF_PROJET", "PILOTE_QUALITE")
                         .requestMatchers("/api/historique/**").hasAnyRole("ADMIN", "CHEF_PROJET", "PILOTE_QUALITE")
                         // Autoriser les opérations POST nécessaires pour Historique (filtres, export)
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/historique/**").hasAnyRole("ADMIN", "PILOTE_QUALITE")
