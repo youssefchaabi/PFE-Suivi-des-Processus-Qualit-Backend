@@ -22,4 +22,8 @@ public class Utilisateur {
     private LocalDateTime dateCreation;
     private LocalDateTime dateModification;
     private String creePar; // ID de l'utilisateur qui a créé ce compte
+    
+    // Champs pour la réinitialisation du mot de passe
+    private String resetPasswordToken;
+    private LocalDateTime resetPasswordTokenExpiry;
 }
