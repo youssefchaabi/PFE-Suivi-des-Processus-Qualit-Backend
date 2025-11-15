@@ -32,22 +32,19 @@ jobs:
       
       - name: Build avec Maven
         run: mvn clean install -DskipTests
-        working-directory: ./suivi-processus-qualite-backend-main
       
       - name: Exécution des tests unitaires
         run: mvn test
-        working-directory: ./suivi-processus-qualite-backend-main
       
       - name: Génération du rapport de couverture
         run: mvn jacoco:report
-        working-directory: ./suivi-processus-qualite-backend-main
         continue-on-error: true
       
       - name: Upload des artefacts
         uses: actions/upload-artifact@v4
         with:
           name: backend-jar
-          path: suivi-processus-qualite-backend-main/target/*.jar
+          path: target/*.jar
           retention-days: 7
 
   # Job 2: Analyse de code avec SonarQube (optionnel)
@@ -79,7 +76,6 @@ jobs:
             -Dsonar.projectKey=suivi-processus-qualite \
             -Dsonar.host.url=$SONAR_HOST_URL \
             -Dsonar.login=$SONAR_TOKEN
-        working-directory: ./suivi-processus-qualite-backend-main
         continue-on-error: true
 
   # Job 3: Build Docker Image
@@ -102,7 +98,6 @@ jobs:
       
       - name: Build du projet
         run: mvn clean package -DskipTests
-        working-directory: ./suivi-processus-qualite-backend-main
       
       - name: Login Docker Hub
         uses: docker/login-action@v3
@@ -113,7 +108,7 @@ jobs:
       - name: Build et Push Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: ./suivi-processus-qualite-backend-main
+          context: .
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/suivi-qualite-backend:latest
