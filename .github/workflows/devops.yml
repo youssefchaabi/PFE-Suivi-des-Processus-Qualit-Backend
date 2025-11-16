@@ -16,6 +16,20 @@ jobs:
     name: Build et Test Backend
     runs-on: ubuntu-latest
     
+    services:
+      mongodb:
+        image: mongo:7.0
+        env:
+          MONGO_INITDB_ROOT_USERNAME: testuser
+          MONGO_INITDB_ROOT_PASSWORD: testpass
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand({ping: 1})'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
     steps:
       - name: Checkout du code
         uses: actions/checkout@v4
@@ -37,6 +51,8 @@ jobs:
         run: ./mvnw clean install -DskipTests
       
       - name: Exécution des tests unitaires
+        env:
+          SPRING_DATA_MONGODB_URI: mongodb://testuser:testpass@localhost:27017/test?authSource=admin
         run: ./mvnw test
       
       - name: Génération du rapport de couverture
