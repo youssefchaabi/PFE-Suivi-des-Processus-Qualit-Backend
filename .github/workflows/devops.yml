@@ -34,7 +34,7 @@ jobs:
         run: mvn clean install -DskipTests
       
       - name: Exécution des tests unitaires
-        run: mvn test
+        run: ./mvnw test
       
       - name: Génération du rapport de couverture
         run: mvn jacoco:report
