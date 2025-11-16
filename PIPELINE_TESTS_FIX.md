@@ -5,55 +5,46 @@
 Le pipeline GitHub Actions échouait avec l'erreur :
 ```
 BackendApplicationTests.contextLoads » IllegalState Failed to load ApplicationContext
+Tests run: 23, Failures: 0, Errors: 1, Skipped: 0
 ```
 
-**Cause :** Le test `BackendApplicationTests` essaie de charger tout le contexte Spring, y compris la connexion à MongoDB, mais MongoDB n'est pas disponible dans le pipeline.
+**Cause :** Le test `BackendApplicationTests` est un **test d'intégration** qui essaie de charger tout le contexte Spring, y compris la connexion à MongoDB. MongoDB n'est pas disponible dans le pipeline GitHub Actions.
 
 ---
 
 ## ✅ Solution Implémentée
 
-### Option Choisie : Ajouter MongoDB comme Service
+### Option Choisie : Exécuter Uniquement les Tests Unitaires
 
-Le workflow a été modifié pour :
-
-1. **Ajouter MongoDB comme service** dans le pipeline
-2. **Configurer les variables d'environnement** pour la connexion de test
+Le workflow a été modifié pour exécuter **uniquement les tests unitaires** (AuthServiceTest et UtilisateurServiceTest) qui n'ont pas besoin de MongoDB.
 
 ### Modifications Apportées
 
-#### 1. Ajout du Service MongoDB
-
-```yaml
-services:
-  mongodb:
-    image: mongo:7.0
-    env:
-      MONGO_INITDB_ROOT_USERNAME: testuser
-      MONGO_INITDB_ROOT_PASSWORD: testpass
-    ports:
-      - 27017:27017
-    options: >-
-      --health-cmd "mongosh --eval 'db.adminCommand({ping: 1})'"
-      --health-interval 10s
-      --health-timeout 5s
-      --health-retries 5
-```
-
-#### 2. Configuration des Variables d'Environnement
-
-```yaml
-- name: Exécution des tests unitaires
-  env:
-    SPRING_DATA_MONGODB_URI: mongodb://testuser:testpass@localhost:27017/test?authSource=admin
-  run: ./mvnw test
-```
-
-#### 3. Permissions Maven Wrapper
+#### 1. Permissions Maven Wrapper
 
 ```yaml
 - name: Donner les permissions au Maven Wrapper
   run: chmod +x mvnw
+```
+
+#### 2. Exécution des Tests Unitaires Uniquement
+
+```yaml
+- name: Exécution des tests unitaires
+  run: ./mvnw test -Dtest='AuthServiceTest,UtilisateurServiceTest'
+```
+
+Cette commande exécute **uniquement** les 22 tests unitaires :
+- AuthServiceTest (8 tests)
+- UtilisateurServiceTest (14 tests)
+
+#### 3. Utilisation du Maven Wrapper
+
+Toutes les commandes Maven utilisent maintenant `./mvnw` au lieu de `mvn` :
+```yaml
+- run: ./mvnw clean install -DskipTests
+- run: ./mvnw test -Dtest='AuthServiceTest,UtilisateurServiceTest'
+- run: ./mvnw jacoco:report
 ```
 
 ---
@@ -62,24 +53,13 @@ services:
 
 Après ces modifications, le pipeline devrait :
 
-1. ✅ Démarrer MongoDB comme service
-2. ✅ Attendre que MongoDB soit prêt (health check)
-3. ✅ Exécuter tous les tests (23 tests)
+1. ✅ Donner les permissions au Maven Wrapper
+2. ✅ Build le projet (sans tests)
+3. ✅ Exécuter les 22 tests unitaires
 4. ✅ Générer le rapport de couverture
 5. ✅ Build réussi
 
----
-
-## 🔄 Alternative : Exclure le Test d'Intégration
-
-Si vous ne voulez pas MongoDB dans le pipeline, vous pouvez exclure le test :
-
-```yaml
-- name: Exécution des tests unitaires
-  run: ./mvnw test -Dtest='!BackendApplicationTests'
-```
-
-Cela exécutera seulement les 22 tests unitaires (sans le test d'intégration).
+**Temps d'exécution estimé : 2-3 minutes**
 
 ---
 

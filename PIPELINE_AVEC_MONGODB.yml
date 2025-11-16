@@ -1,3 +1,6 @@
+# Configuration Alternative : Pipeline avec MongoDB (tous les tests)
+# Remplacez le contenu de .github/workflows/devops.yml par celui-ci si vous voulez exécuter tous les 23 tests
+
 name: CI/CD Pipeline - Backend Suivi Processus Qualité
 
 on:
@@ -15,6 +18,21 @@ jobs:
   build-and-test:
     name: Build et Test Backend
     runs-on: ubuntu-latest
+    
+    services:
+      mongodb:
+        image: mongo:7.0
+        env:
+          MONGO_INITDB_ROOT_USERNAME: testuser
+          MONGO_INITDB_ROOT_PASSWORD: testpass
+          MONGO_INITDB_DATABASE: test
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand({ping: 1})' --quiet"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     
     steps:
       - name: Checkout du code
@@ -36,8 +54,19 @@ jobs:
       - name: Build avec Maven
         run: ./mvnw clean install -DskipTests
       
+      - name: Créer un fichier de configuration de test
+        run: |
+          mkdir -p src/test/resources
+          cat > src/test/resources/application-test.properties << EOF
+          spring.data.mongodb.uri=mongodb://testuser:testpass@localhost:27017/test?authSource=admin
+          spring.data.mongodb.database=test
+          EOF
+      
       - name: Exécution des tests unitaires
-        run: ./mvnw test -Dtest='AuthServiceTest,UtilisateurServiceTest'
+        env:
+          SPRING_PROFILES_ACTIVE: test
+          SPRING_DATA_MONGODB_URI: mongodb://testuser:testpass@localhost:27017/test?authSource=admin
+        run: ./mvnw test
       
       - name: Génération du rapport de couverture
         run: ./mvnw jacoco:report
