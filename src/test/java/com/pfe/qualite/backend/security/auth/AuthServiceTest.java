@@ -63,8 +63,7 @@ class AuthServiceTest {
         utilisateurTest = new Utilisateur();
         utilisateurTest.setId("user123");
         utilisateurTest.setEmail("test@example.com");
-        utilisateurTest.setNom("Test");
-        utilisateurTest.setPrenom("User");
+        utilisateurTest.setNom("Test User");
         utilisateurTest.setPassword("encodedPassword");
         utilisateurTest.setRole("ADMIN");
 

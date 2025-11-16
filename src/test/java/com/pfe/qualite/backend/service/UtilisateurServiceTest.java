@@ -46,8 +46,7 @@ class UtilisateurServiceTest {
         utilisateurTest = new Utilisateur();
         utilisateurTest.setId("user123");
         utilisateurTest.setEmail("test@example.com");
-        utilisateurTest.setNom("Test");
-        utilisateurTest.setPrenom("User");
+        utilisateurTest.setNom("Test User");
         utilisateurTest.setPassword("encodedPassword");
         utilisateurTest.setRole("ADMIN");
         utilisateurTest.setActif(true);
@@ -116,8 +115,7 @@ class UtilisateurServiceTest {
         // Given
         Utilisateur newUser = new Utilisateur();
         newUser.setEmail("new@example.com");
-        newUser.setNom("New");
-        newUser.setPrenom("User");
+        newUser.setNom("New User");
         newUser.setRole("CHEF_PROJET");
         newUser.setPassword("password123");
 
