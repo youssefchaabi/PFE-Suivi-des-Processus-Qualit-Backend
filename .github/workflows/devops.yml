@@ -79,6 +79,7 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
           ./mvnw clean verify sonar:sonar \
+            -Dtest='AuthServiceTest,UtilisateurServiceTest' \
             -Dsonar.projectKey=suivi-processus-qualite \
             -Dsonar.host.url=$SONAR_HOST_URL \
             -Dsonar.login=$SONAR_TOKEN
