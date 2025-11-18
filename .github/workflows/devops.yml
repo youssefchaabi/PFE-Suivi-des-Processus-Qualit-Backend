@@ -81,7 +81,7 @@ jobs:
         run: |
           ./mvnw clean verify sonar:sonar \
             -Dtest='AuthServiceTest,UtilisateurServiceTest' \
-            -Dsonar.projectKey=suivi-processus-qualite \
+            -Dsonar.projectKey=youssefchaabi_PFE-Suivi-des-Processus-Qualit-Backend \
             -Dsonar.organization=$SONAR_ORGANIZATION \
             -Dsonar.host.url=$SONAR_HOST_URL \
             -Dsonar.login=$SONAR_TOKEN
