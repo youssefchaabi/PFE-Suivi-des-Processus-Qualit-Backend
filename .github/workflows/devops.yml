@@ -133,6 +133,11 @@ jobs:
     if: github.ref == 'refs/heads/main'
     
     steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # nécessaire pour avoir tout l'historique git
+
       - name: Déploiement sur Vercel
         uses: amondnet/vercel-action@v20
         with:
@@ -141,6 +146,7 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
           working-directory: ./
+
 
   # Job 5 Notification
   notify:
