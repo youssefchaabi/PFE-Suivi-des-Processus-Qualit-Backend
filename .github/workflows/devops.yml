@@ -50,7 +50,7 @@ jobs:
           path: target/*.jar
           retention-days: 7
 
-          # Job 2: Analyse de code avec SonarQube (optionnel)
+  # Job 2: Analyse de code avec SonarQube
   code-quality:
     name: Analyse de qualité du code
     runs-on: ubuntu-latest
@@ -125,7 +125,7 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/suivi-qualite-backend:latest
             ${{ secrets.DOCKER_USERNAME }}/suivi-qualite-backend:${{ github.sha }}
 
-  # Job 4 Déploiement (optionnel)
+  # Job 4 Déploiement
   deploy:
     name: Déploiement
     runs-on: ubuntu-latest
@@ -134,10 +134,11 @@ jobs:
     
     steps:
       - name: Déploiement sur Vercel
-       with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}        # Token API Vercel
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}  # ID du projet
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}      # ID de l'organisation
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
           working-directory: ./
 
