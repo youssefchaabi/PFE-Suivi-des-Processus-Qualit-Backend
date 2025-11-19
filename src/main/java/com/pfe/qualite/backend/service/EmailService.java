@@ -1,7 +1,7 @@
 package com.pfe.qualite.backend.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -14,11 +14,19 @@ import jakarta.mail.internet.MimeMessage;
  * Service d'envoi d'emails avec templates HTML
  */
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class EmailService {
 
     private final JavaMailSender mailSender;
+    
+    public EmailService(@Autowired(required = false) JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+        if (mailSender == null) {
+            log.warn("⚠️ EmailService initialisé sans JavaMailSender - Les emails ne seront pas envoyés");
+        } else {
+            log.info("✅ EmailService initialisé avec JavaMailSender");
+        }
+    }
 
     /**
      * Envoie un email simple (alias pour compatibilité)
@@ -31,6 +39,10 @@ public class EmailService {
      * Envoie un email simple
      */
     public void sendSimpleEmail(String to, String subject, String text) {
+        if (mailSender == null) {
+            log.warn("⚠️ Impossible d'envoyer l'email - JavaMailSender non configuré");
+            return;
+        }
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -52,6 +64,10 @@ public class EmailService {
      * Envoie un email HTML
      */
     public void sendHtmlEmail(String to, String subject, String htmlContent) {
+        if (mailSender == null) {
+            log.warn("⚠️ Impossible d'envoyer l'email HTML - JavaMailSender non configuré");
+            return;
+        }
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -74,6 +90,10 @@ public class EmailService {
      */
     public void sendEmailWithAttachment(String to, String subject, String htmlContent, 
                                        byte[] attachment, String attachmentName) {
+        if (mailSender == null) {
+            log.warn("⚠️ Impossible d'envoyer l'email avec pièce jointe - JavaMailSender non configuré");
+            return;
+        }
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
