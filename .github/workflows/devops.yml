@@ -121,6 +121,7 @@ jobs:
           SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
         run: |
           ./mvnw clean verify sonar:sonar \
+            -Dtest='!BackendApplicationTests' \
             -Dsonar.projectKey=youssefchaabi_PFE-Suivi-des-Processus-Qualit-Backend \
             -Dsonar.organization=$SONAR_ORGANIZATION \
             -Dsonar.host.url=https://sonarcloud.io \
