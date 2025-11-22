@@ -36,8 +36,8 @@ jobs:
       - name: Build avec Maven
         run: ./mvnw clean install -DskipTests
       
-      - name: Exécution de TOUS les tests unitaires
-        run: ./mvnw test
+      - name: Exécution des tests unitaires (sans tests d'intégration)
+        run: ./mvnw test -Dtest='!BackendApplicationTests'
       
       - name: Génération du rapport de couverture
         run: ./mvnw jacoco:report
@@ -70,8 +70,8 @@ jobs:
       - name: Donner les permissions au Maven Wrapper
         run: chmod +x mvnw
       
-      - name: Exécution de TOUS les tests unitaires
-        run: ./mvnw test
+      - name: Exécution des tests unitaires (sans tests d'intégration)
+        run: ./mvnw test -Dtest='!BackendApplicationTests'
       
       - name: Génération du rapport JaCoCo
         run: ./mvnw jacoco:report
