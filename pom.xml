@@ -19,6 +19,11 @@
 
 	<properties>
 		<java.version>17</java.version>
+		<sonar.organization>votre-organisation</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.projectKey>votre-projet-key</sonar.projectKey>
+		<sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+		<sonar.exclusions>**/BackendApplicationTests.java</sonar.exclusions>
 	</properties>
 
 	<dependencies>
@@ -158,6 +163,13 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+
+			<!-- SonarQube Plugin -->
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.10.0.2594</version>
 			</plugin>
 		</plugins>
 	</build>
