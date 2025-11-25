@@ -134,6 +134,7 @@ jobs:
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
             -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.branch.name=main \
             -Dsonar.qualitygate.wait=false
 
   # Job 4: Build Docker Image
